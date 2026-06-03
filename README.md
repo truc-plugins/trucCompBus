@@ -41,6 +41,38 @@ Green (0 → −3) · Yellow (−3 → −9) · Orange (−9 → −15) · Red (
 
 ---
 
+## macOS Security Warning / macOS セキュリティ警告
+
+When opening the plugin for the first time, macOS may show a warning:  
+**"trucComp@Bus.vst3 cannot be opened because Apple cannot check it for malicious software."**
+
+This is because the plugin is not signed with an Apple Developer certificate.  
+Run the following commands in Terminal to allow it:
+
+```bash
+xattr -cr ~/Library/Audio/Plug-Ins/VST3/trucComp@Bus.vst3
+xattr -cr ~/Library/Audio/Plug-Ins/Components/trucComp@Bus.component
+```
+
+Then re-scan plug-ins in your DAW.
+
+---
+
+初回起動時に以下のような警告が表示される場合があります：  
+**「"trucComp@Bus.vst3" は開いていません」**
+
+これはAppleの開発者証明書による署名がないためです。  
+ターミナルで以下のコマンドを実行することで使用できるようになります：
+
+```bash
+xattr -cr ~/Library/Audio/Plug-Ins/VST3/trucComp@Bus.vst3
+xattr -cr ~/Library/Audio/Plug-Ins/Components/trucComp@Bus.component
+```
+
+実行後、DAW でプラグインを再スキャンしてください。
+
+---
+
 ## Requirements
 
 - macOS 11.0+ (Apple Silicon, arm64)
