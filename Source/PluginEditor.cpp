@@ -134,15 +134,13 @@ TrucCompBusEditor::~TrucCompBusEditor()
 
 void TrucCompBusEditor::timerCallback()
 {
-    // Update knob value displays
     const float tv = proc.apvts.getRawParameterValue("threshold")->load();
     threshValueLabel.setText(juce::String(tv, 1) + " dB", juce::dontSendNotification);
 
     const float ov = proc.apvts.getRawParameterValue("output")->load();
-    const juce::String ovStr = (ov >= 0.0f ? "+" : "") + juce::String(ov, 1) + " dB";
-    outputValueLabel.setText(ovStr, juce::dontSendNotification);
+    outputValueLabel.setText((ov >= 0.0f ? "+" : "") + juce::String(ov, 1) + " dB",
+                             juce::dontSendNotification);
 
-    // GR meter
     grMeter.setGainReductionDb(proc.getCurrentGRDb());
     grMeter.repaint();
 }
@@ -155,11 +153,9 @@ void TrucCompBusEditor::paint(juce::Graphics& g)
 {
     g.fillAll(juce::Colour(0xFF1A1A1A));
 
-    // Panel background
     g.setColour(juce::Colour(0xFF222222));
     g.fillRect(15, 32, W - 30, H - 48);
 
-    // Plugin name
     g.setColour(juce::Colour(0xFF888888));
     g.setFont(monoFont(11.0f));
     g.drawText("trucComp@Bus", 0, 10, W, 16, juce::Justification::centred, false);
@@ -172,10 +168,9 @@ void TrucCompBusEditor::paint(juce::Graphics& g)
 void TrucCompBusEditor::resized()
 {
     // ── THRESHOLD  (left half — large knob) ──────────────────────────────
-    // Left half: x=15..255 (240px wide), knob centred inside
     constexpr int thKnobSize = 150;
-    constexpr int thCentreX  = 15 + 240 / 2;          // 135
-    const     int thKnobX    = thCentreX - thKnobSize / 2;  // 60
+    constexpr int thCentreX  = 15 + 240 / 2;              // 135
+    const     int thKnobX    = thCentreX - thKnobSize / 2; // 60
     constexpr int thKnobY    = 75;
 
     threshValueLabel.setBounds(thKnobX - 5, thKnobY - 18, thKnobSize + 10, 14);
@@ -183,12 +178,11 @@ void TrucCompBusEditor::resized()
     threshTextLabel .setBounds(thKnobX - 5, thKnobY + thKnobSize + 5, thKnobSize + 10, 13);
 
     // ── RATIO / MODE buttons  (right-middle area, top) ───────────────────
-    // Middle section: x=255..385 (130px)
-    constexpr int btnW   = 52;
-    constexpr int btnH   = 32;
-    constexpr int btnGap = 6;
-    constexpr int ratioX = 258;
-    constexpr int modeX  = 320;   // ratioX + btnW + 10
+    constexpr int btnW    = 52;
+    constexpr int btnH    = 32;
+    constexpr int btnGap  = 6;
+    constexpr int ratioX  = 258;
+    constexpr int modeX   = 320;
     constexpr int btnTopY = 58;
 
     ratioTextLabel.setBounds(ratioX, btnTopY - 14, btnW, 12);
@@ -202,9 +196,8 @@ void TrucCompBusEditor::resized()
     // ── OUTPUT knob  (below RATIO / MODE buttons) ────────────────────────
     // Buttons bottom: btnTopY + btnH + btnGap + btnH = 58+32+6+32 = 128
     constexpr int outKnobSize = 68;
-    // Centre horizontally in the middle section (ratioX..modeX+btnW = 258..372)
     constexpr int outCentreX  = (ratioX + modeX + btnW) / 2;   // 315
-    const     int outKnobX    = outCentreX - outKnobSize / 2;   // 281
+    const     int outKnobX    = outCentreX - outKnobSize / 2;  // 281
     constexpr int outKnobY    = 165;
 
     outputValueLabel.setBounds(outKnobX - 5, outKnobY - 16, outKnobSize + 10, 13);

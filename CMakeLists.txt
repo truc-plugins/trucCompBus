@@ -12,11 +12,18 @@ endif()
 
 add_subdirectory(${JUCE_PATH} JUCE EXCLUDE_FROM_ALL)
 
+# AAX SDK
+if(NOT DEFINED AAX_PATH)
+    set(AAX_PATH "$ENV{HOME}/Desktop/ClaudeCode/aax-sdk-2-9-0")
+endif()
+juce_set_aax_sdk_path(${AAX_PATH})
+
 juce_add_plugin(trucCompBus
     COMPANY_NAME               "Truc"
     PLUGIN_MANUFACTURER_CODE   "Truc"
     PLUGIN_CODE                "TrCB"
-    FORMATS                    VST3 AU Standalone
+    FORMATS                    VST3 AU AAX Standalone
+    AAX_IDENTIFIER             "com.truc.trucCompBus"
     PRODUCT_NAME               "trucComp@Bus"
     IS_SYNTH                   FALSE
     NEEDS_MIDI_INPUT           FALSE

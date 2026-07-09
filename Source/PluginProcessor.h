@@ -35,6 +35,9 @@ public:
 
 private:
     BusCompressor compressor;
+    double currentSampleRate = 44100.0;
+    float  outGainSmoothed   = 1.0f;
+
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(TrucCompBusProcessor)

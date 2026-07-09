@@ -37,6 +37,8 @@ TrucCompBusProcessor::createParameterLayout()
 
 void TrucCompBusProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
+    currentSampleRate = sampleRate;
+    outGainSmoothed   = 1.0f;
     compressor.prepare(sampleRate, samplesPerBlock);
 }
 
@@ -56,14 +58,16 @@ void TrucCompBusProcessor::processBlock(juce::AudioBuffer<float>& buffer,
     const int   ratioIdx  = static_cast<int>(apvts.getRawParameterValue("ratio")->load());
     const int   modeIdx   = static_cast<int>(apvts.getRawParameterValue("mode")->load());
 
-    const float ratioVal  = (ratioIdx == 0) ? 3.5f : 8.0f;
-    const auto  mode      = (modeIdx  == 0) ? BusCompressor::Mode::S : BusCompressor::Mode::A;
+    const float ratioVal = (ratioIdx == 0) ? 3.5f : 8.0f;
+    const auto  mode     = (modeIdx == 0) ? BusCompressor::Mode::S : BusCompressor::Mode::A;
 
     compressor.process(left, right, numSamples, threshDb, ratioVal, mode);
 
-    // Apply output gain after compression
-    const float outGain = juce::Decibels::decibelsToGain(outputDb);
-    buffer.applyGain(outGain);
+    // Output gain with per-block smoothing (~10 ms) to avoid clicks on automation
+    const float targetGain    = juce::Decibels::decibelsToGain(outputDb);
+    const float outSmoothCoeff = std::exp(-float(numSamples) / (float(currentSampleRate) * 0.010f));
+    outGainSmoothed = targetGain + outSmoothCoeff * (outGainSmoothed - targetGain);
+    buffer.applyGain(outGainSmoothed);
 }
 
 void TrucCompBusProcessor::getStateInformation(juce::MemoryBlock& destData)

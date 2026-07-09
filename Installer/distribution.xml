@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="2">
+    <title>trucComp@Bus 1.1.0</title>
+    <organization>com.truc</organization>
+    <domains enable_localSystem="true"/>
+    <options customize="never" require-scripts="false" rootVolumeOnly="true"/>
+
+    <welcome    file="welcome.html" mime-type="text/html"/>
+
+    <pkg-ref id="com.truc.trucCompBus.vst3"/>
+    <pkg-ref id="com.truc.trucCompBus.au"/>
+
+    <choices-outline>
+        <line choice="com.truc.trucCompBus.vst3"/>
+        <line choice="com.truc.trucCompBus.au"/>
+    </choices-outline>
+
+    <choice id="com.truc.trucCompBus.vst3" title="VST3" description="VST3プラグイン" selected="true">
+        <pkg-ref id="com.truc.trucCompBus.vst3"/>
+    </choice>
+    <choice id="com.truc.trucCompBus.au" title="Audio Unit (AU)" description="Audio Unitプラグイン" selected="true">
+        <pkg-ref id="com.truc.trucCompBus.au"/>
+    </choice>
+
+    <pkg-ref id="com.truc.trucCompBus.vst3" version="1.1.0" onConclusion="none">trucCompBus_VST3.pkg</pkg-ref>
+    <pkg-ref id="com.truc.trucCompBus.au"   version="1.1.0" onConclusion="none">trucCompBus_AU.pkg</pkg-ref>
+</installer-gui-script>
